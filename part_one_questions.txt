@@ -1,0 +1,6 @@
+#best quality cutoff:
+~30 anything higher would filter out all the indexes into "unknown"
+
+#count number of undetermined reads:
+cat *test | awk 'BEGIN{lineCount = 1}; {if(lineCount == 2){lineCount =-1; {if($0 ~ /N/){undetermined += 1}}}else{lineCount += 1}}END{print undetermined}'
+ANSWER: 13499075
