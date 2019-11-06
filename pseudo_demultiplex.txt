@@ -1,0 +1,111 @@
+#NEED A WAY TO STORE INDEX VALUES AND CODES
+#make dictionary of index sequences
+#key is the sequence "GATCAT"
+#value is the code "B1"
+open `indexes.txt` as indexFile
+        #file contains index codes and sequences by row
+        #B1
+        #GATATATATATAT
+#Fill dictionary form indexes.txt
+
+
+#FUNCTION FOR DETERMINING IF INDEX IS IN KNOWN INDEX DICTIONARY
+defineFunction matchesIndexes(inputString)
+        '''ensures the input sequence is an index in indexes.txt'''
+
+        if inputString in indexDictionary
+                  return True
+        else
+                  return False
+
+#TEST INPUT
+        input:          expected_output:
+        A               False
+        CTCTGGAT        True
+
+FUNCTION FOR QUALITY SCORE
+defineFunction getQuality(inputString)
+        #convert each character to phred33 with ord() and -33
+        #take average of all scores and return value
+
+#TEST INPUT
+        input:          expected_output:
+        A               32
+        EFG             37
+
+#FUNCTION FOR DETERMINING WHETHER TWO SEQUENCES ARE COMPLEMENTS
+defineFunction isComplement(string1, string2)
+        #This function compares two sequences to determine whether they are complements
+        #int charIndex is index for characters in each string (must be same length)
+        #If there is a mismatch function will return False
+        #DOES NOT WORK WITH BASE "N"
+
+        #Iterate through each character in strings
+        #if two bases aren't complements return False
+        #if all bases are complements return True
+
+#TEST INPUT
+          input:          expected_output:
+          ATC TGG         False
+          ATC TCG         True
+
+#with open(), read fastq files R1-4
+
+#lineCount provides an index for row number
+lineCount = 1
+
+#Counters for reads based on index matching/quality
+uknownCount = 0
+mismatchedCount = 0
+totalReadCount = 0
+
+
+for forIndex, revIndex, forInsert, & revInsert in forIndexFile, revIndexFile, forInsertFile, & revInsertFile
+        #strings that collect rows for forward and reverse reads
+        forwardRead = ""
+        reverseRead = ""
+
+        #start assuming nothing is "wrong" with the read
+        indexUnknown = False
+        mismatch = False
+
+        #outputString: filename the read will be saved to. Changes depending on indexes
+        #unknown index -> "unknown"
+        #mismatched indexes -> "mismatched"
+        #matching indexes -> "{index_name}"
+
+        #CHANGE OUTPUT FILE DEPENDING ON INDEXES/ COUNT INSTANCES
+        #determine whether on sequence line
+        #1.save insert header if on first line
+        #2. If on second line
+            #set outputString to index code for forward index with the index dictionary
+            #if theres a a unknown index matchesIndexes()
+            #change outputString to "unknown" and increase unknownCount
+            #if index mismatch isComplement()
+            #change ouputString to "mismatched" and increase mismatchedCount
+
+        #PRINT FIRST THREE LINES NEW FORMATTED READ
+        #Add to Read strings with formatted headers and sequences
+
+                #EXPECTED STRING VALUES
+                #InsertHeader_GATAC_CTATG
+                #GCATAGATGAGGGCCGAAGAGAGTGATGTAGTAGGATTC
+                #+
+                #for forward and reverse inserts
+
+        #4. If fourth line
+            #add quality line to read and check the score. Must meet threshold. getQuality()
+            #if quality score too low, outputString should be "unknown"
+
+
+            #PRINT READ IN FORMATTED FILE (AT END OF EACH 4th ITERATION IN FOR LOOP)
+            #concat read to its correct output file based on outputString
+            with write(outputString + "_R1" + ".fq", w+) as outFile
+
+            #EXPECTED outFile names:
+            #(B1, A8, F9 ...)_R1.fq & (B1, A8, F9 ...)_R2.fq
+            #unknown_R1.fq & unknown_R2.fq
+            #mismatched_R1.fq & mismatched_R2.fq
+
+
+#Print number of mismatched reads, unknown reads, and matched reads
