@@ -1,0 +1,12 @@
+#!/bin/bash
+#SBATCH --account=bgmp          ### SLURM account which will be charged for the job
+#SBATCH --partition=bgmp        ### Partition (like a queue in PBS)
+#SBATCH --job-name=demult      ### Job Name
+#SBATCH --output=demultLong.out         ### File in which to store job output
+#SBATCH --time=0-20:00:00       ### Wall clock time limit in Days-HH:MM:SS
+#SBATCH --nodes=1               ### Node count required for the job
+#SBATCH --ntasks-per-node=1     ### Nuber of tasks to be launched per Node
+#SBATCH --cpus-per-task=1       ### Number of cpus (cores) per task
+/usr/bin/time -v ./demultyplex.py -f 1294_S1_L008_R1_001.fastq.gz \
+-r 1294_S1_L008_R4_001.fastq.gz -b 1294_S1_L008_R2_001.fastq.gz \
+-B 1294_S1_L008_R3_001.fastq.gz -q 30 -o output/ -m mapping.tsv
